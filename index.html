@@ -444,5 +444,22 @@ Thank you!`);
   recalc();
 })();
 </script>
+<!-- Provider Type toggle -->
+<script>
+(function(){
+  const orgSel = document.getElementById('orgType');
+  const provField = document.getElementById('providerTypeField');
+  if (!orgSel || !provField) return;
+
+  function syncProviderTypeVisibility(){
+    provField.style.display = (orgSel.value === 'provider') ? '' : 'none';
+  }
+
+  orgSel.addEventListener('change', syncProviderTypeVisibility);
+  // run once on load
+  syncProviderTypeVisibility();
+})();
+</script>
+
 </body>
 </html>
