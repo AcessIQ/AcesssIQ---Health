@@ -62,7 +62,7 @@
  <div class="row">
  <div class="left grid-1">
  <div class="card">
-<!-- Organization Type selector -->
+<!-- Organization Type + Provider Type (same row) -->
 <div class="form-row">
   <div class="field">
     <div class="label">Organization Type</div>
@@ -71,9 +71,30 @@
       <option value="hospital">Hospital</option>
       <option value="mco">MCO</option>
     </select>
-    <div class="tip">We’ll prefill assumptions and show relevant fields next.</div>
+    <div class="tip">Select the overall organization category.</div>
+  </div>
+
+  <div class="field" id="providerTypeField">
+    <div class="label">Provider Type</div>
+    <select id="providerType">
+      <option value="home_health">Home Health Care</option>
+      <option value="ccb">Community Centered Board (CCB)</option>
+      <option value="adult_day_cbas">Adult Day Health / CBAS</option>
+      <option value="idd_group_homes">IDD Group Homes</option>
+      <option value="aba_therapy">ABA Therapy Provider</option>
+      <option value="sud_residential_otp">SUD Provider (Residential / OTP)</option>
+      <option value="outpatient_mh_ccbhc_cmhc">Outpatient MH Clinic (CCBHC / CMHC)</option>
+      <option value="nemt">NEMT Provider</option>
+      <option value="memory_care">Memory Care Facility</option>
+      <option value="snf">Skilled Nursing Facility (SNF)</option>
+      <option value="assisted_living_rcf">Assisted Living / RCF</option>
+      <option value="fqhc_rhc">FQHC / RHC</option>
+      <option value="hospice">Hospice Provider</option>
+    </select>
+    <div class="tip">What type of provider are you?.</div>
   </div>
 </div>
+
 <!-- State selector (step 2: UI only) -->
 <div class="form-row">
   <div class="field">
@@ -83,7 +104,7 @@
       <option value="CO">Colorado</option>
       <!-- add more states later -->
     </select>
-    <div class="tip">We’ll use this later to prefill FMAP, PMPM, etc.</div>
+    <div class="tip">If you are in multiple states, select National.</div>
   </div>
 </div>  
  <h3>Tell Us About Your Agency</h3>
