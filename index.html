@@ -156,7 +156,104 @@
     </select>
     <div class="tip">If you are in multiple states, select National.</div>
   </div>
-</div>  
+</div>
+<!-- HOSPITAL (Outpatient) — UI block -->
+<div id="hospitalBlock" style="display:none; margin-top:8px">
+  <h3>Hospital (Outpatient) — Inputs</h3>
+
+  <!-- Clinic & Volume -->
+  <div class="form-row">
+    <div class="field">
+      <div class="label">Caregivers (total)</div>
+      <input id="hospCaregivers" type="number" min="0" step="1" value="30" />
+      <div class="tip">Total therapists/clinicians in the outpatient unit.</div>
+    </div>
+    <div class="field">
+      <div class="label">Visits per day (all caregivers)</div>
+      <input id="hospVisitsPerDay" type="number" min="0" step="1" value="250" />
+      <div class="tip">Total daily visits across all caregivers.</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <div class="label">Clinic days / week</div>
+      <input id="hospDaysPerWeek" type="number" min="1" max="7" step="1" value="5" />
+      <div class="tip">Operational days per week.</div>
+    </div>
+    <div class="field">
+      <div class="label">Drops (lose Medicaid) / week</div>
+      <input id="hospDropsPerWeek" type="number" min="0" step="1" value="25" />
+      <div class="tip">Typical weekly disenrollments (20–30 for Denver PT).</div>
+    </div>
+  </div>
+
+  <!-- Churn & Timing -->
+  <div class="form-row">
+    <div class="field">
+      <div class="label">Re-enrollment gap (weeks)</div>
+      <input id="hospGapWeeks" type="number" min="0" step="0.5" value="4" />
+      <div class="tip">Average time to get coverage back.</div>
+    </div>
+    <div class="field">
+      <div class="label">% never return</div>
+      <input id="hospNeverPct" type="number" min="0" max="100" step="1" value="30" />
+      <div class="tip">Share who never re-enroll / never resume rehab.</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <div class="label">% scheduled slots unfilled during gap</div>
+      <input id="hospUnfilledPct" type="number" min="0" max="100" step="1" value="50" />
+      <div class="tip">Half of scheduled slots go unfilled = 50%.</div>
+    </div>
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:8px;margin-top:22px">
+        <input id="hospBind" type="checkbox" checked />
+        <span>Bind “People saved / year” = Drops/week × 52</span>
+      </label>
+      <div class="tip">Turn off if you want to type people saved separately.</div>
+    </div>
+  </div>
+
+  <!-- Billing Units -->
+  <div class="form-row">
+    <div class="field">
+      <div class="label">Units per visit (15-min)</div>
+      <input id="hospUnitsPerVisit" type="number" min="1" step="1" value="2" />
+      <div class="tip">Most PT visits are ~2 units (30 min).</div>
+    </div>
+    <div class="field">
+      <div class="label">$ per unit</div>
+      <input id="hospDollarsPerUnit" type="number" min="0" step="1" value="45" />
+      <div class="tip">Avg allowed per 15-min unit.</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <div class="label">Visits per patient per week</div>
+      <input id="hospVisitsPerPatientPerWeek" type="number" min="0" step="0.5" value="2" />
+      <div class="tip">Typical PT cadence (2/wk).</div>
+    </div>
+    <div class="field">
+      <div class="label">Uninsured admission factor</div>
+      <input id="hospAdmitFactor" type="number" min="0" step="0.1" value="0.4" />
+      <div class="tip">Admits avoided per person saved (default 0.4).</div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field" style="grid-column:1 / span 2">
+      <div class="label">$ per uninsured admission</div>
+      <input id="hospAdmitCost" type="number" min="0" step="100" value="13000" />
+      <div class="tip">Denver assumption: $13,000 per avoidable admission.</div>
+    </div>
+  </div>
+</div>
+<!-- /HOSPITAL UI -->
+   
  <h3>Tell Us About Your Agency</h3>
  <div class="form-row" style="grid-template-columns:1fr">
  <div class="field">
