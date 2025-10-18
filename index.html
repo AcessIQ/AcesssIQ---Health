@@ -627,6 +627,108 @@ Thank you!`);
   syncHospitalVisibility(); // on load
 })();
 </script>
+<script>
+// Hospital (Outpatient) calculations
+(function(){
+  const $ = id => document.getElementById(id);
+  const money = v => "$" + (Math.max(0, Math.round(v||0))).toLocaleString();
+
+  const ids = [
+    "hospCaregivers","hospVisitsPerDay","hospDaysPerWeek",
+    "hospDropsPerWeek","hospGapWeeks","hospNeverPct","hospUnfilledPct",
+    "hospUnitsPerVisit","hospDollarsPerUnit","hospVisitsPerPatientPerWeek",
+    "hospAdmitFactor","hospAdmitCost","hospBind","savedPerYear"
+  ];
+
+  function hospitalRecalc(){
+    // Only run when Organization Type = Hospital
+    const orgSel = $('orgType');
+    if (!orgSel || orgSel.value !== 'hospital') return;
+
+    // Inputs
+    const dropsPerWeek   = +($('hospDropsPerWeek')?.value || 0);
+    const gapWeeks       = +($('hospGapWeeks')?.value || 0);
+    const neverPct       = (+($('hospNeverPct')?.value || 0))/100;
+    const unfilledPct    = (+($('hospUnfilledPct')?.value || 0))/100;
+    const unitsPerVisit  = +($('hospUnitsPerVisit')?.value || 0);
+    const dollarsPerUnit = +($('hospDollarsPerUnit')?.value || 0);
+    const visitsPerPtWk  = +($('hospVisitsPerPatientPerWeek')?.value || 0);
+    const admitFactor    = +($('hospAdmitFactor')?.value || 0);
+    const admitCost      = +($('hospAdmitCost')?.value || 0);
+
+    // Bind “People saved / year” to drops/week × 52 if checked
+    const bind = $('hospBind')?.checked;
+    const dropsPerYear = dropsPerWeek * 52;
+    if (bind && $('savedPerYear')) $('savedPerYear').value = Math.round(dropsPerYear);
+
+    // Revenue per visit (units * $/unit)
+    const revPerVisit = unitsPerVisit * dollarsPerUnit;
+
+    // Unfilled visits during the gap per drop event
+    const scheduledDuringGap = gapWeeks * visitsPerPtWk;
+    const unfilledDuringGap  = scheduledDuringGap * unfilledPct;
+
+    // Unfilled revenue per drop event
+    const revUnfilledPerEvent = unfilledDuringGap * revPerVisit;
+
+    // Split: returners vs never-returners (conservative: both count gap-only)
+    const shareReturn = Math.max(0, 1 - neverPct);
+    const shareNever  = Math.max(0, neverPct);
+
+    // Annual outpatient revenue loss
+    const lossReturn = dropsPerYear * shareReturn * revUnfilledPerEvent;
+    const lossNever  = dropsPerYear * shareNever  * revUnfilledPerEvent;
+    const lossOutpatient = lossReturn + lossNever;
+
+    // Admissions avoided & dollars (system impact)
+    const pplSaved = +($('savedPerYear')?.value || 0); // may be set above if bind is ON
+    const avoided  = pplSaved * admitFactor;
+    const admDollars = avoided * admitCost;
+
+    // ---- Write results to UI ----
+
+    // 1) Show Outpatient Revenue Loss inside the "Hospitals" pill
+    try {
+      const pills = document.querySelectorAll('.pill');
+      let hospPill = null;
+      pills.forEach(p=>{
+        const h5 = p.querySelector('h5');
+        if (h5 && /Hospitals/i.test(h5.textContent)) hospPill = p;
+      });
+      if (hospPill) {
+        let out = hospPill.querySelector('#hospOutLoss');
+        if (!out) {
+          out = document.createElement('div');
+          out.id = 'hospOutLoss';
+          out.className = 'small';
+          hospPill.appendChild(out);
+        }
+        out.textContent = `Outpatient Revenue Loss (annual): ${money(lossOutpatient)}`;
+      }
+    } catch(e){ /* ignore */ }
+
+    // 2) Admissions dollars → update existing Hospitals dollars element if present
+    if ($('hospDollars')) $('hospDollars').textContent = money(admDollars);
+
+    // 3) Optional: if you add an avoided-admissions count element later
+    const avoidedCountEl = document.getElementById('hospAvoidCount');
+    if (avoidedCountEl) avoidedCountEl.textContent = (Math.round(avoided)).toLocaleString();
+  }
+
+  // Recalculate when hospital inputs change
+  ids.forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', hospitalRecalc);
+  });
+
+  // Also recalc if the shared "savedPerYear" input changes
+  const spy = $('savedPerYear');
+  if (spy) spy.addEventListener('input', hospitalRecalc);
+
+  // Run once on load
+  hospitalRecalc();
+})();
+</script>
 
 </body>
 </html>
