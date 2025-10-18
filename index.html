@@ -613,6 +613,20 @@ Thank you!`);
   syncProviderTypeVisibility();
 })();
 </script>
+<script>
+// Show/Hide Hospital block based on Organization Type
+(function(){
+  const orgSel = document.getElementById('orgType');
+  const hosp   = document.getElementById('hospitalBlock');
+  if (!orgSel || !hosp) return;
+
+  function syncHospitalVisibility(){
+    hosp.style.display = (orgSel.value === 'hospital') ? '' : 'none';
+  }
+  orgSel.addEventListener('change', syncHospitalVisibility);
+  syncHospitalVisibility(); // on load
+})();
+</script>
 
 </body>
 </html>
