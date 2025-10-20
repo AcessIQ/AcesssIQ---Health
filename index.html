@@ -253,7 +253,7 @@
   </div>
 </div>
 <!-- /HOSPITAL UI -->
-   
+ <div id="agencySection">  
  <h3>Tell Us About Your Agency</h3>
  <div class="form-row" style="grid-template-columns:1fr">
  <div class="field">
@@ -345,6 +345,7 @@
 
  <div class="right grid-1">
  <div class="card">
+ </div>   <!-- end of agencySection wrapper -->
  <h3>Impact</h3>
  <div class="biggrid">
  <div class="metric">
@@ -727,6 +728,13 @@ Thank you!`);
 
   // Run once on load
   hospitalRecalc();
+})();
+</script>
+<script>
+(function(){
+  const orgSel=document.getElementById('orgType'), sec=document.getElementById('agencySection');
+  function sync(){ if(sec) sec.style.display=(orgSel && orgSel.value==='hospital')?'none':''; }
+  if(orgSel){ orgSel.addEventListener('change', sync); sync(); }
 })();
 </script>
 
