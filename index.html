@@ -737,6 +737,36 @@ Thank you!`);
   if(orgSel){ orgSel.addEventListener('change', sync); sync(); }
 })();
 </script>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const orgSel = $('orgType');
+
+  function resetImpactForHospital(){
+    if (!orgSel || orgSel.value !== 'hospital') return;
+    // zero the two inputs that drive the right-side math
+    const a = $('savedPerYear'), b = $('targetDollars');
+    if (a) a.value = 0;
+    if (b) b.value = 0;
+
+    // clear Ripple Impact pills
+    const setText = (id,v)=>{ const el=$(id); if(el) el.textContent=v; };
+    setText('hospAvoidCalc','0');        // Hospitals pill ID 
+    setText('hospDollars','$0–$0');      // Hospitals dollars pill 
+    setText('mcoMonths','0–0');          // MCO months pill (set by JS) 
+    setText('mcoDollars','$0–$0');       // MCO dollars pill 
+    setText('medicaidDollars','$0–$0');  // Medicaid dollars pill 
+
+    // recompute to reflect the new selection
+    if (typeof recalc === 'function') recalc();
+  }
+
+  if (orgSel){
+    orgSel.addEventListener('change', resetImpactForHospital);
+    resetImpactForHospital(); // run once on load
+  }
+})();
+</script>
 
 </body>
 </html>
