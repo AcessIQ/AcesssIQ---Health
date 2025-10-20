@@ -777,7 +777,7 @@ Thank you!`);
     // back to Provider/Agency
     if (sec) sec.style.display = '';
     if (typeof window.recalc === 'function') {
-      setTimeout(window.recalc, 0);
+      window.recalc();
     }
   }
 }
@@ -824,14 +824,6 @@ if (orgSel){
   // Run once on load (won’t do anything unless Hospital is selected)
   computeHospitalImpact();
 })();
-</script>
-<script>
-document.getElementById('orgType')?.addEventListener('change', function () {
-  if (this.value !== 'hospital' && typeof window.recalc === 'function') {
-    // kick Provider/Agency math on toggle back
-    setTimeout(window.recalc, 0);
-  }
-});
 </script>
  
 </body>
