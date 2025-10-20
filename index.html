@@ -826,9 +826,9 @@ if (orgSel){
 </script>
 <script>
 document.getElementById('orgType')?.addEventListener('change', function () {
-  if (this.value !== 'hospital' && typeof window.recalc === 'function') {
+  if (this.value !== 'hospital' && typeof recalc === 'function') {
     // kick Provider/Agency math on toggle back
-    setTimeout(window.recalc, 0);
+    setTimeout(recalc, 0);
   }
 });
 </script>
