@@ -595,6 +595,7 @@ If we prevent ${fmt(ppl)} disenrollments:
 Thank you!`);
     $("mailtoBtn").href = `mailto:info@AccessIQ.health?subject=AccessIQ%20Medicaid%20Impact%20Calculator&body=${body}`;
   }
+  window.recalc = recalc;
   recalc();
 })();
 </script>
@@ -775,8 +776,8 @@ Thank you!`);
   } else {
     // back to Provider/Agency
     if (sec) sec.style.display = '';
-    if (typeof recalc === 'function') {
-      setTimeout(recalc, 0);
+    if (typeof window.recalc === 'function') {
+      setTimeout(window.recalc, 0);
     }
   }
 }
@@ -826,9 +827,9 @@ if (orgSel){
 </script>
 <script>
 document.getElementById('orgType')?.addEventListener('change', function () {
-  if (this.value !== 'hospital' && typeof recalc === 'function') {
+  if (this.value !== 'hospital' && typeof window.recalc === 'function') {
     // kick Provider/Agency math on toggle back
-    setTimeout(recalc, 0);
+    setTimeout(window.recalc, 0);
   }
 });
 </script>
