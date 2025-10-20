@@ -756,7 +756,11 @@ Thank you!`);
     setText('mcoMonths','0–0');          // MCO months pill (set by JS) 
     setText('mcoDollars','$0–$0');       // MCO dollars pill 
     setText('medicaidDollars','$0–$0');  // Medicaid dollars pill 
-
+// ← add these 4 lines to reset the TOP Impact tiles
+    document.getElementById('annualLoss').textContent  = '$0';
+    document.getElementById('monthlyLoss').textContent = '$0';
+    document.getElementById('annualBreak').textContent = '(Long-term $0 • Acute $0 • Admin/CG $0)';
+    document.getElementById('monthlyBreak').textContent= '(Long-term $0 • Acute $0 • Admin/CG $0)';
     // recompute to reflect the new selection
     if (typeof recalc === 'function') recalc();
   }
