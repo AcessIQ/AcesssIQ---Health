@@ -768,7 +768,42 @@ Thank you!`);
   if (orgSel){
     orgSel.addEventListener('change', resetImpactForHospital);
     resetImpactForHospital(); // run once on load
+  }<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const ids = ['hospDropsPerWeek','hospVisitsPerPatientPerWeek','hospUnitsPerVisit','hospDollarsPerUnit','orgType'];
+
+  function computeHospitalImpact(){
+    if (($('orgType')?.value) !== 'hospital') return;
+
+    const dropsPerWeek   = +($('hospDropsPerWeek')?.value || 0);           // 
+    const visitsPerPtWk  = +($('hospVisitsPerPatientPerWeek')?.value || 0); // 
+    const unitsPerVisit  = +($('hospUnitsPerVisit')?.value || 0);           // 
+    const dollarsPerUnit = +($('hospDollarsPerUnit')?.value || 0);          // 
+
+    const revPerVisit = unitsPerVisit * dollarsPerUnit;     // $/visit
+    const visitsLostWk = dropsPerWeek * visitsPerPtWk;      // visits/week lost
+    const weeklyLoss = visitsLostWk * revPerVisit;          // $/week
+    const annual  = Math.max(0, Math.round(weeklyLoss * 52));
+    const monthly = Math.max(0, Math.round(annual / 12));
+    const money = v => "$" + v.toLocaleString();
+
+    // Update the top Impact tiles
+    document.getElementById('annualLoss').textContent  = money(annual);
+    document.getElementById('monthlyLoss').textContent = money(monthly);
+    document.getElementById('annualBreak').textContent = `(visits lost ${visitsLostWk}/wk • revenue/visit $${revPerVisit.toLocaleString()})`;
+    document.getElementById('monthlyBreak').textContent= `(from weekly loss $${Math.round(weeklyLoss).toLocaleString()})`; // 
   }
+
+  // Recalc when any relevant field changes
+  ids.forEach(id => { const el = $(id); if (el) el.addEventListener('input', computeHospitalImpact); });
+  $('orgType')?.addEventListener('change', computeHospitalImpact);
+
+  // Run once on load (won’t do anything unless Hospital is selected)
+  computeHospitalImpact();
+})();
+</script>
+
 })();
 </script>
 
