@@ -782,15 +782,19 @@ Thank you!`);
 }
 
 
-  if (orgSel){
-    orgSel.addEventListener('change', resetImpactForHospital);
-    resetImpactForHospital(); // run once on load
-  }<script>
+if (orgSel){
+  orgSel.addEventListener('change', resetImpactForHospital);
+  resetImpactForHospital(); // run once on load
+}
+})();
+</script>
+<script>
+
 (function(){
   const $ = id => document.getElementById(id);
   const ids = ['hospDropsPerWeek','hospVisitsPerPatientPerWeek','hospUnitsPerVisit','hospDollarsPerUnit','orgType'];
 
-  function computeHospitalImpact(){
+  window.computeHospitalImpact = function computeHospitalImpact(){
     if (($('orgType')?.value) !== 'hospital') return;
 
     const dropsPerWeek   = +($('hospDropsPerWeek')?.value || 0);           // 
