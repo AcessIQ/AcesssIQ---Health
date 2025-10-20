@@ -825,6 +825,28 @@ if (orgSel){
   computeHospitalImpact();
 })();
 </script>
+...
+</script>
+<script>
+(function(){
+  // Hide whole field blocks for these input IDs (Hospital section only)
+  const idsToHide = [
+    'hospCaregivers',
+    'hospVisitsPerDay',
+    'hospDaysPerWeek',
+    'hospBind',
+    'hospAdmitFactor',
+    'hospAdmitCost'
+  ];
+  idsToHide.forEach(id => {
+    const el = document.getElementById(id);
+    const field = el ? el.closest('.field') : null;
+    if (field) field.style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>
  
 </body>
 </html>
