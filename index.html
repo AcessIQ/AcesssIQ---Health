@@ -743,27 +743,44 @@ Thank you!`);
   const orgSel = $('orgType');
 
   function resetImpactForHospital(){
-    if (!orgSel || orgSel.value !== 'hospital') return;
-    // zero the two inputs that drive the right-side math
+  const $ = (id) => document.getElementById(id);
+  const sec = $('agencySection');
+  const orgSel = $('orgType');
+  if (!orgSel) return;
+
+  if (orgSel.value === 'hospital') {
+    if (sec) sec.style.display = 'none';
+
+    // zero the two inputs that feed the top tiles
     const a = $('savedPerYear'), b = $('targetDollars');
     if (a) a.value = 0;
     if (b) b.value = 0;
 
-    // clear Ripple Impact pills
+    // clear Ripple + top Impact tiles
     const setText = (id,v)=>{ const el=$(id); if(el) el.textContent=v; };
-    setText('hospAvoidCalc','0');        // Hospitals pill ID 
-    setText('hospDollars','$0–$0');      // Hospitals dollars pill 
-    setText('mcoMonths','0–0');          // MCO months pill (set by JS) 
-    setText('mcoDollars','$0–$0');       // MCO dollars pill 
-    setText('medicaidDollars','$0–$0');  // Medicaid dollars pill 
-// ← add these 4 lines to reset the TOP Impact tiles
-    document.getElementById('annualLoss').textContent  = '$0';
-    document.getElementById('monthlyLoss').textContent = '$0';
-    document.getElementById('annualBreak').textContent = '(Long-term $0 • Acute $0 • Admin/CG $0)';
-    document.getElementById('monthlyBreak').textContent= '(Long-term $0 • Acute $0 • Admin/CG $0)';
-    // recompute to reflect the new selection
-    if (typeof recalc === 'function') recalc();
+    setText('hospAvoidCalc','0');
+    setText('hospDollars','$0–$0');
+    setText('mcoMonths','0–0');
+    setText('mcoDollars','$0–$0');
+    setText('medicaidDollars','$0–$0');
+    setText('annualLoss','$0');
+    setText('monthlyLoss','$0');
+    setText('annualBreak','(Long-term $0 • Acute $0 • Admin/CG $0)');
+    setText('monthlyBreak','(Long-term $0 • Acute $0 • Admin/CG $0)');
+
+    // run Hospital math last so it wins
+    if (typeof window.computeHospitalImpact === 'function') {
+      setTimeout(window.computeHospitalImpact, 0);
+    }
+  } else {
+    // back to Provider/Agency
+    if (sec) sec.style.display = '';
+    if (typeof recalc === 'function') {
+      setTimeout(recalc, 0);
+    }
   }
+}
+
 
   if (orgSel){
     orgSel.addEventListener('change', resetImpactForHospital);
